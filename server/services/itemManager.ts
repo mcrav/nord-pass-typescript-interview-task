@@ -1,4 +1,4 @@
-import { passwords } from '../data';
+import { passwords } from "../data";
 
 let items = [];
 
@@ -13,8 +13,5 @@ export const getItems = () => {
     return {
       ...(updatedItem || passwordItem),
     };
-  })
+  });
 };
-
-
-

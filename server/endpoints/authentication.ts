@@ -1,18 +1,22 @@
-import { Router } from 'express';
-import timeout from '../middleware/timeout';
-import { users } from '../data';
-import { addToken, removeToken, getTokenOwner, generateToken } from '../services/tokenManager';
+import { Router } from "express";
+import timeout from "../middleware/timeout";
+import { users } from "../data";
+import {
+  addToken,
+  removeToken,
+  getTokenOwner,
+  generateToken,
+} from "../services/tokenManager";
 
 const router = Router();
 
 // if password and email is correct returns new token
-router.get('/api/login',timeout, (req, res) => {
-  const {username, password} = req.query;
+router.get("/api/login", timeout, (req, res) => {
+  const { username, password } = req.query;
 
-  const user = users.find((user) => (
-    user.username === username &&
-    user.password === password
-  ));
+  const user = users.find(
+    (user) => user.username === username && user.password === password
+  );
 
   if (user) {
     const token = generateToken();
@@ -23,7 +27,7 @@ router.get('/api/login',timeout, (req, res) => {
       id: user.id,
       email: user.email,
       token,
-    })
+    });
 
     return;
   }
@@ -32,8 +36,8 @@ router.get('/api/login',timeout, (req, res) => {
 });
 
 // deletes token
-router.get('/api/logout', (req, res) => {
-  const token = req.headers.authorization?.split(' ')?.[1];
+router.get("/api/logout", (req, res) => {
+  const token = req.headers.authorization?.split(" ")?.[1];
 
   if (token) {
     removeToken(token);
@@ -45,17 +49,15 @@ router.get('/api/logout', (req, res) => {
 });
 
 // return token owner info
-router.get('/api/user', (req, res) => {
-  const token = req.headers.authorization?.split(' ')?.[1];
+router.get("/api/user", (req, res) => {
+  const token = req.headers.authorization?.split(" ")?.[1];
 
   if (token) {
     const tokenOwnerId = getTokenOwner(token);
 
     if (tokenOwnerId) {
-      const tokenOwner = users.find((user) => (
-        user.id === tokenOwnerId
-      ));
-  
+      const tokenOwner = users.find((user) => user.id === tokenOwnerId);
+
       res.status(200).json({
         id: tokenOwner.id,
         username: tokenOwner.username,

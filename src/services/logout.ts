@@ -1,5 +1,3 @@
-const logout = () => {
-
-};
+const logout = () => {};
 
 export default logout;

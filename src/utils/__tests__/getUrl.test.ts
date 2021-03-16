@@ -1,30 +1,26 @@
-import getUrl from '../getUrl';
-import { API } from '../../constants';
+import getUrl from "../getUrl";
+import { API } from "../../constants";
 
-process.env.API_URL = 'http://localhost:9003';
+process.env.API_URL = "http://localhost:9003";
 
-describe('should convert api url and params to URI', () => {
+describe("should convert api url and params to URI", () => {
   test.each([
+    ["http://localhost:9003/api/login", API.Login, {}],
     [
-      'http://localhost:9003/api/login',
-      API.Login,
-      {},
-    ],
-    [
-      'http://localhost:9003/api/login?username=vardenis',
+      "http://localhost:9003/api/login?username=vardenis",
       API.Login,
       {
-        username: 'vardenis'
+        username: "vardenis",
       },
     ],
     [
-      'http://localhost:9003/api/login?id=1234',
+      "http://localhost:9003/api/login?id=1234",
       API.Login,
       {
-        id: 1234
+        id: 1234,
       },
     ],
-  ])('should return %s', (expectedResult, api, params) => {
+  ])("should return %s", (expectedResult, api, params) => {
     expect(getUrl(api, params)).toBe(expectedResult);
   });
-})
+});
