@@ -13,8 +13,5 @@ export const getItems = () => {
     return {
       ...(updatedItem || passwordItem),
     };
-  })
+  });
 };
-
-
-

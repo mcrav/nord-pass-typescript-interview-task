@@ -1,13 +1,13 @@
-import {SyntheticEvent, useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import {Routes} from '~/constants';
+import { SyntheticEvent, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Routes } from '~/constants';
 import login from '~/services/login';
 import ErrorBlock from '../ErrorBlock';
 
 import './login-style.scss';
 
 const Login = () => {
-  const {push} = useHistory();
+  const { push } = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -27,9 +27,7 @@ const Login = () => {
   return (
     <div className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h1 className="text-center">
-          Password Health
-        </h1>
+        <h1 className="text-center">Password Health</h1>
         <input
           value={username}
           onChange={(event) => setUsername(event.target.value)}
@@ -44,13 +42,13 @@ const Login = () => {
           type="password"
           className="input mt-24px"
         />
-        <ErrorBlock error={errorMessage}/>
+        <ErrorBlock error={errorMessage} />
         <button type="submit" className="button mt-24px">
           Login
         </button>
       </form>
     </div>
-  )
+  );
 };
 
 export default Login;

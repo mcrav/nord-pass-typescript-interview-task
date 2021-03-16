@@ -1,5 +1,5 @@
-import {FC, useState} from 'react';
-import {IItem} from "~/services/getUserItems";
+import { FC, useState } from 'react';
+import { IItem } from '~/services/getUserItems';
 import ItemIcon from './components/ItemIcon';
 import updateItem from '../../../../services/updateItem';
 import Modal from 'react-modal';
@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import './list-style.scss';
 
 interface IList {
-  items: Array<IItem>,
+  items: Array<IItem>;
 }
 
 interface IUpdateModal {
@@ -34,48 +34,50 @@ const UpdateModal: FC<IUpdateModal> = ({ item }) => {
           placeholder="new password"
           className="input"
           value={newPass}
-          onChange={(event) => setNewPass(event.target.value)} 
+          onChange={(event) => setNewPass(event.target.value)}
         />
         <div className="pt-12px text-center">
-          <button className="button" onClick={async () => {
-            await updateItem({
-              ...item,
-              password: newPass,
-            })
+          <button
+            className="button"
+            onClick={async () => {
+              await updateItem({
+                ...item,
+                password: newPass,
+              });
 
-            window.location.reload();
-          }}>Change</button>
-          <button className="button ml-12px" onClick={() => {
-            setNewPass('');
-            setShowModal(false)
-          }}>
+              window.location.reload();
+            }}
+          >
+            Change
+          </button>
+          <button
+            className="button ml-12px"
+            onClick={() => {
+              setNewPass('');
+              setShowModal(false);
+            }}
+          >
             Cancel
           </button>
         </div>
       </Modal>
     </>
   );
-}
+};
 
-const List: FC<IList> = ({items}) => (
+const List: FC<IList> = ({ items }) => (
   <ul className="list">
-    {
-      items.map((item) => (
-        <li className="item">
-          <ItemIcon title={item.title}/>
-          <div>
-            <div className="title">
-              {item.title}
-            </div>
-            <div className="description">
-              {item.description}
-            </div>
-          </div>
-          <UpdateModal item={item} />
-        </li>
-      ))
-    }
+    {items.map((item) => (
+      <li className="item">
+        <ItemIcon title={item.title} />
+        <div>
+          <div className="title">{item.title}</div>
+          <div className="description">{item.description}</div>
+        </div>
+        <UpdateModal item={item} />
+      </li>
+    ))}
   </ul>
-)
+);
 
 export default List;
