@@ -4,6 +4,7 @@ import ErrorBlock from '../ErrorBlock';
 import Filter from './components/Filter/Filter';
 import LoadingScreen from '../LoadingScreen';
 import Header from './components/Header/Header';
+import { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Routes } from '~/constants';
 import itemHasWeakPassword from '~/utils/itemHasWeakPassword';
@@ -16,8 +17,10 @@ const PasswordHealth = () => {
     isLoading: userDataIsLoading,
     username,
   } = useUserContext();
-
-  const { items, isLoading, errorMessage } = useItemsProvider();
+  const [passwordUpdates, setPasswordUpdates] = useState(0);
+  const { items, isLoading, errorMessage } = useItemsProvider({
+    passwordUpdates,
+  });
 
   if (isLoading || userDataIsLoading) {
     return <LoadingScreen />;
@@ -26,21 +29,29 @@ const PasswordHealth = () => {
   if (userProviderErrorMessage || errorMessage) {
     return <ErrorBlock error={userProviderErrorMessage || errorMessage} />;
   }
-
   return (
     <div className="container">
       <Header items={items} username={username} />
       <Filter items={items} />
       <Switch>
         <Route exact path={Routes.PasswordHealth}>
-          <List items={items} />
+          <List
+            items={items}
+            onPasswordUpdate={() => {
+              setPasswordUpdates(passwordUpdates + 1);
+            }}
+          />
         </Route>
         <Route path={Routes.Weak}>
-          <List items={items.filter(itemHasWeakPassword)} />
+          <List
+            items={items.filter(itemHasWeakPassword)}
+            onPasswordUpdate={() => setPasswordUpdates(passwordUpdates + 1)}
+          />
         </Route>
         <Route path={Routes.Reused}>
           <List
             items={items.filter((item) => itemHasReusedPassword(item, items))}
+            onPasswordUpdate={() => setPasswordUpdates(passwordUpdates + 1)}
           />
         </Route>
       </Switch>
