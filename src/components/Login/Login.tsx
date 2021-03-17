@@ -4,6 +4,7 @@ import { ClipLoader } from 'react-spinners';
 import { Routes } from '~/constants';
 import login from '~/services/login';
 import ErrorBlock from '../ErrorBlock';
+import { validateUsername, validatePassword } from './validation';
 
 import './login-style.scss';
 
@@ -29,6 +30,30 @@ const Login = () => {
     }
   };
 
+  let usernameValid, usernameErrorMessage;
+  // Validate inputted username
+  if (username !== '') {
+    const { valid, error } = validateUsername(username);
+    usernameValid = valid;
+    usernameErrorMessage = error;
+    // Blank username is not valid
+  } else {
+    const usernameValid = false;
+    const usernameErrorMessage = '';
+  }
+
+  let passwordValid, passwordErrorMessage;
+  // Validate inputted password
+  if (password !== '') {
+    const { valid, error } = validatePassword(password);
+    passwordValid = valid;
+    passwordErrorMessage = error;
+    // Blank password is not valid
+  } else {
+    passwordValid = false;
+    passwordErrorMessage = '';
+  }
+
   return (
     <div className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
@@ -40,6 +65,7 @@ const Login = () => {
           type="text"
           className="input mt-52px"
         />
+        <span className="mt-5px">{usernameErrorMessage}</span>
         <input
           value={password}
           onChange={(event) => setPassword(event.target.value)}
@@ -47,8 +73,13 @@ const Login = () => {
           type="password"
           className="input mt-24px"
         />
+        <span className="mt-5px">{passwordErrorMessage}</span>
         <ErrorBlock error={errorMessage} />
-        <button type="submit" className="button mt-24px" disabled={loading}>
+        <button
+          type="submit"
+          className="button mt-24px"
+          disabled={!usernameValid || !passwordValid || loading}
+        >
           Login
         </button>
         <div className="loader-container">
