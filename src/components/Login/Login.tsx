@@ -1,5 +1,6 @@
 import { SyntheticEvent, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 import { Routes } from '~/constants';
 import login from '~/services/login';
 import ErrorBlock from '../ErrorBlock';
@@ -11,15 +12,19 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     setErrorMessage(null);
 
     try {
       await login(username, password);
+      setLoading(false);
       push(Routes.PasswordHealth);
     } catch (error) {
+      setLoading(false);
       setErrorMessage(error.message);
     }
   };
@@ -43,9 +48,12 @@ const Login = () => {
           className="input mt-24px"
         />
         <ErrorBlock error={errorMessage} />
-        <button type="submit" className="button mt-24px">
+        <button type="submit" className="button mt-24px" disabled={loading}>
           Login
         </button>
+        <div className="loader-container">
+          <ClipLoader loading={loading} />
+        </div>
       </form>
     </div>
   );
