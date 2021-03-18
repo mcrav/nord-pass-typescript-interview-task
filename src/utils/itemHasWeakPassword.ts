@@ -2,7 +2,7 @@ import { IItem } from '~/services/getUserItems';
 
 /**
  * Check if password for given password item is weak
- * @param item Password item to checks
+ * @param item Password item to check
  */
 const itemHasWeakPassword = (item: IItem) => {
   const { password } = item;
@@ -14,7 +14,7 @@ const itemHasWeakPassword = (item: IItem) => {
     password.match(/[0-9]/) != null,
   ].filter(Boolean).length;
 
-  return strength > 2;
+  return strength < 3;
 };
 
 export default itemHasWeakPassword;
