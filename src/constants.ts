@@ -8,6 +8,7 @@ export enum Routes {
 }
 
 export enum API {
+  Logout = 'api/logout',
   Login = 'api/login',
   Items = 'api/items',
   User = 'api/user',
