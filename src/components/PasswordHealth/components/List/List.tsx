@@ -8,13 +8,15 @@ import './list-style.scss';
 
 interface IList {
   items: Array<IItem>;
+  onPasswordUpdate: Function;
 }
 
 interface IUpdateModal {
   item: IItem;
+  onPasswordUpdate: Function;
 }
 
-const UpdateModal: FC<IUpdateModal> = ({ item }) => {
+const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
   const [showModal, setShowModal] = useState(false);
   const [newPass, setNewPass] = useState('');
 
@@ -44,8 +46,9 @@ const UpdateModal: FC<IUpdateModal> = ({ item }) => {
                 ...item,
                 password: newPass,
               });
-
-              window.location.reload();
+              setNewPass('');
+              setShowModal(false);
+              onPasswordUpdate();
             }}
           >
             Change
@@ -65,7 +68,7 @@ const UpdateModal: FC<IUpdateModal> = ({ item }) => {
   );
 };
 
-const List: FC<IList> = ({ items }) => (
+const List: FC<IList> = ({ items, onPasswordUpdate }) => (
   <ul className="list">
     {items.map((item) => (
       <li className="item">
@@ -74,7 +77,7 @@ const List: FC<IList> = ({ items }) => (
           <div className="title">{item.title}</div>
           <div className="description">{item.description}</div>
         </div>
-        <UpdateModal item={item} />
+        <UpdateModal item={item} onPasswordUpdate={onPasswordUpdate} />
       </li>
     ))}
   </ul>
