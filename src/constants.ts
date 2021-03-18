@@ -1,3 +1,6 @@
+/**
+ * Paths used for navigation
+ */
 export enum Routes {
   Login = '/login',
   PasswordHealth = '/items',
@@ -7,6 +10,9 @@ export enum Routes {
   Root = '/',
 }
 
+/**
+ * Available API endpoints
+ */
 export enum API {
   Logout = 'api/logout',
   Login = 'api/login',

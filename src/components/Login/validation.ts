@@ -14,7 +14,7 @@ const MAX_PASSWORD_LENGTH = 32;
  */
 const alphanumericRegexp = new RegExp('^[a-zA-Z0-9]*$');
 
-interface ValidationResult {
+interface IValidationResult {
   valid: boolean;
   error: string;
 }
@@ -23,12 +23,14 @@ interface ValidationResult {
  * Validate username by length and characters used.
  * @param username Username to validate
  */
-export const validateUsername = (username: string): ValidationResult => {
+export const validateUsername = (username: string): IValidationResult => {
   let valid = true;
   let error = '';
+  // Validate length
   if (username.length > MAX_USERNAME_LENGTH) {
     error = `Username longer than ${MAX_USERNAME_LENGTH} characters`;
     valid = false;
+    // Validate characters used
   } else if (!username.match(alphanumericRegexp)) {
     error = 'Invalid characters in username';
     valid = false;
@@ -40,7 +42,7 @@ export const validateUsername = (username: string): ValidationResult => {
  * Validate password by length
  * @param password Password to validate
  */
-export const validatePassword = (password: string): ValidationResult => {
+export const validatePassword = (password: string): IValidationResult => {
   let valid = true;
   let error = '';
   if (password.length > MAX_PASSWORD_LENGTH) {

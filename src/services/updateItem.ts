@@ -2,6 +2,9 @@ import { API } from '~/constants';
 import getUrl from '~/utils/getUrl';
 import { IItem } from './getUserItems';
 
+/**
+ * Update password for given password item
+ */
 const updateItem = (item: IItem) =>
   fetch(getUrl(API.Items), {
     method: 'POST',

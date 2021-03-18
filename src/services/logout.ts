@@ -1,6 +1,9 @@
 import { API } from '~/constants';
 import getUrl from '../utils/getUrl';
 
+/**
+ * Send logout request to server and remove session token from local storage
+ */
 const logout = async () => {
   const url = getUrl(API.Logout);
   const token = localStorage.getItem('token');

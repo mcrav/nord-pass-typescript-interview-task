@@ -7,10 +7,15 @@ import logout from '../../../../services/logout';
 import './header-style.scss';
 
 interface IHeader {
+  // All password items
   items: Array<IItem>;
+  // Username that is logged in
   username: string;
 }
 
+/**
+ * Page header to show user warnings and logout button
+ */
 const Header: FC<IHeader> = ({ items, username }) => {
   const { push } = useHistory();
 
