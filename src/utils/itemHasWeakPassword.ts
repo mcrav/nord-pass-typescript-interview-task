@@ -1,5 +1,9 @@
 import { IItem } from '~/services/getUserItems';
 
+/**
+ * Check if password for given password item is weak
+ * @param item Password item to checks
+ */
 const itemHasWeakPassword = (item: IItem) => {
   const { password } = item;
 

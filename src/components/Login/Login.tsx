@@ -8,22 +8,34 @@ import { validateUsername, validatePassword } from './validation';
 
 import './login-style.scss';
 
+/**
+ * Login page component
+ */
 const Login = () => {
   const { push } = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  // Error message from failed authentication
   const [errorMessage, setErrorMessage] = useState<string>();
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Handle form submission. Authenticate user based on inputted username and
+   * password.
+   * @param event Form submission event
+   */
   const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Start loading spinner and reset error message
     setLoading(true);
     setErrorMessage(null);
 
+    // If login successful go to Password Health page and stop loading spinner
     try {
       await login(username, password);
       setLoading(false);
       push(Routes.PasswordHealth);
+      // If login unsuccessful stop loading spinner and show error message
     } catch (error) {
       setLoading(false);
       setErrorMessage(error.message);

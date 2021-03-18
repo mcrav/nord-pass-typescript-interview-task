@@ -8,6 +8,9 @@ export interface IItem {
   createdAt: string;
 }
 
+/**
+ * Get password items of authenticated user from server
+ */
 const getUserItems = async (userId?: string): Promise<Array<IItem>> => {
   const url = getUrl(API.Items, {
     userId,

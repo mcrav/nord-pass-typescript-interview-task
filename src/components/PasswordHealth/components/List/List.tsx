@@ -7,18 +7,26 @@ import Modal from 'react-modal';
 import './list-style.scss';
 
 interface IList {
+  // All password items
   items: Array<IItem>;
+  // Callback for when password is updated
   onPasswordUpdate: Function;
 }
 
 interface IUpdateModal {
+  // Password item being updated
   item: IItem;
+  // Callback for when password is updated.
   onPasswordUpdate: Function;
 }
 
+/**
+ * Modal allowing user to update password for specific password item.
+ * If modal not open, just shows a button that will open the modal.
+ */
 const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
   const [showModal, setShowModal] = useState(false);
-  const [newPass, setNewPass] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   return (
     <>
@@ -35,8 +43,8 @@ const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
         <input
           placeholder="new password"
           className="input"
-          value={newPass}
-          onChange={(event) => setNewPass(event.target.value)}
+          value={newPassword}
+          onChange={(event) => setNewPassword(event.target.value)}
         />
         <div className="pt-12px text-center">
           <button
@@ -44,9 +52,9 @@ const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
             onClick={async () => {
               await updateItem({
                 ...item,
-                password: newPass,
+                password: newPassword,
               });
-              setNewPass('');
+              setNewPassword('');
               setShowModal(false);
               onPasswordUpdate();
             }}
@@ -56,7 +64,7 @@ const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
           <button
             className="button ml-12px"
             onClick={() => {
-              setNewPass('');
+              setNewPassword('');
               setShowModal(false);
             }}
           >
@@ -68,6 +76,10 @@ const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
   );
 };
 
+/**
+ * List of all password items, with icon, title, description and button to
+ * update password.
+ */
 const List: FC<IList> = ({ items, onPasswordUpdate }) => (
   <ul className="list">
     {items.map((item) => (

@@ -1,5 +1,6 @@
 @import '../../../../style/_variables';
 
+// Page header with warnings and logout button
 .header {
   height: 160px;
   display: flex;
@@ -9,6 +10,7 @@
   background-color: $red;
   color: white;
 
+  // Logout button section
   .user-section {
     top: 16px;
     right: 32px;

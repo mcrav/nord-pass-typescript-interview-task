@@ -24,6 +24,9 @@ const UserContext = createContext<IUser>({
 
 export const useUserContext = () => useContext(UserContext);
 
+/**
+ * Context provider to allow components access to authenticated user's details
+ */
 export const UserContextProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState<string>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +34,9 @@ export const UserContextProvider = ({ children }) => {
   const [email, setEmail] = useState<string>(null);
   const [id, setId] = useState<string>(null);
 
+  /**
+   * Get user details associated with session token
+   */
   const updateUser = async () => {
     setErrorMessage(null);
     setIsLoading(true);
@@ -54,6 +60,9 @@ export const UserContextProvider = ({ children }) => {
     setIsLoading(false);
   };
 
+  /**
+   * Reset all user details
+   */
   const deleteData = () => {
     setErrorMessage(null);
     setIsLoading(false);
@@ -62,6 +71,10 @@ export const UserContextProvider = ({ children }) => {
     setId(null);
   };
 
+  /**
+   * When provider initializes update user details with details corresponding to
+   * session token.
+   */
   useEffect(() => {
     updateUser();
   }, []);
