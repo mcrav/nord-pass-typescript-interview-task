@@ -38,13 +38,23 @@ export const UserContextProvider = ({ children }) => {
    * Get user details associated with session token
    */
   const updateUser = async () => {
+    const token = localStorage.getItem('token');
+    // When PrivateRoute renders without an authenticated user, there is a
+    // brief period where the private component mounts, triggering this
+    // effect. The component then rapidly unmounts, meaning the state setting
+    // in this function causes "state update on an unmounted component" warnings.
+    // By checking if a token is available before continuing this can be avoided.
+    if (!token) {
+      return;
+    }
+
     setErrorMessage(null);
     setIsLoading(true);
 
     try {
       const response = await fetch(getUrl(API.User), {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
