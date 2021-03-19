@@ -13,6 +13,14 @@ const userItemsProvider = ({ passwordUpdates }) => {
   // list is requested from the server.
   useEffect(() => {
     (async () => {
+      // When PrivateRoute renders without an authenticated user, there is a
+      // brief period where the private component mounts, triggering this
+      // effect. The component then rapidly unmounts meaning the state setting
+      // in this function causes "state update on an unmounted component" warnings.
+      // By checking if a token is available before continuing this can be avoided.
+      if (!localStorage.getItem('token')) {
+        return;
+      }
       setIsLoading(true);
 
       try {

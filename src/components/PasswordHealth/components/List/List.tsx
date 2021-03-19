@@ -38,6 +38,8 @@ const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
         isOpen={showModal}
         onRequestClose={() => setShowModal(false)}
         contentLabel="Example Modal"
+        // Needed for screenreaders
+        appElement={document.getElementById('app')}
       >
         <h1>Update Password</h1>
         <input
@@ -83,7 +85,7 @@ const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
 const List: FC<IList> = ({ items, onPasswordUpdate }) => (
   <ul className="list">
     {items.map((item) => (
-      <li className="item">
+      <li key={item.title} className="item">
         <ItemIcon title={item.title} />
         <div>
           <div className="title">{item.title}</div>

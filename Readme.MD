@@ -11,6 +11,7 @@
 - Added tests
 - Added documentation and tidied up code
 - Fixed bug in `itemHasWeakPassword` function causing test to fail
+- Fixed console warnings
 
 All branches from above changes have been kept in case you want to look at certain diffs individually.
 
