@@ -17,4 +17,11 @@
     width: 350px;
     height: 400px;
   }
+
+  // Container for loading spinner shown after login
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+  }
 }

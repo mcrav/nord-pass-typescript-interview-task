@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import authentication from '../middleware/authentication';
 import { getItems, updateItem } from '../services/itemManager';
 
@@ -17,14 +17,14 @@ router.post('/api/items', authentication, (req, res) => {
     res.status(400).send('mandatory parameter is missing');
     return;
   }
-  
+
   updateItem({
     id,
     title,
     description,
     password,
     createdAt: new Date().toDateString(),
-  })
+  });
 
   res.status(200).send();
 });

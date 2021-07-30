@@ -24,6 +24,9 @@ const UserContext = createContext<IUser>({
 
 export const useUserContext = () => useContext(UserContext);
 
+/**
+ * Context provider to allow components access to authenticated user's details
+ */
 export const UserContextProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState<string>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,15 +34,28 @@ export const UserContextProvider = ({ children }) => {
   const [email, setEmail] = useState<string>(null);
   const [id, setId] = useState<string>(null);
 
+  /**
+   * Get user details associated with session token
+   */
   const updateUser = async () => {
+    const token = localStorage.getItem('token');
+    // When PrivateRoute renders without an authenticated user, there is a
+    // brief period where the private component mounts, triggering this
+    // effect. The component then rapidly unmounts, meaning the state setting
+    // in this function causes "state update on an unmounted component" warnings.
+    // By checking if a token is available before continuing this can be avoided.
+    if (!token) {
+      return;
+    }
+
     setErrorMessage(null);
     setIsLoading(true);
 
     try {
       const response = await fetch(getUrl(API.User), {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await response.json();
@@ -52,8 +68,11 @@ export const UserContextProvider = ({ children }) => {
     }
 
     setIsLoading(false);
-  }
+  };
 
+  /**
+   * Reset all user details
+   */
   const deleteData = () => {
     setErrorMessage(null);
     setIsLoading(false);
@@ -62,8 +81,12 @@ export const UserContextProvider = ({ children }) => {
     setId(null);
   };
 
+  /**
+   * When provider initializes update user details with details corresponding to
+   * session token.
+   */
   useEffect(() => {
-   updateUser();
+    updateUser();
   }, []);
 
   const value = {
@@ -76,11 +99,7 @@ export const UserContextProvider = ({ children }) => {
     id,
   };
 
-  return (
-    <UserContext.Provider value={value}>
-      {children}
-    </UserContext.Provider>
-  )
-}
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+};
 
 export default UserContext;

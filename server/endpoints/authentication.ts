@@ -1,18 +1,22 @@
 import { Router } from 'express';
 import timeout from '../middleware/timeout';
 import { users } from '../data';
-import { addToken, removeToken, getTokenOwner, generateToken } from '../services/tokenManager';
+import {
+  addToken,
+  removeToken,
+  getTokenOwner,
+  generateToken,
+} from '../services/tokenManager';
 
 const router = Router();
 
 // if password and email is correct returns new token
-router.get('/api/login',timeout, (req, res) => {
-  const {username, password} = req.query;
+router.get('/api/login', timeout, (req, res) => {
+  const { username, password } = req.query;
 
-  const user = users.find((user) => (
-    user.username === username &&
-    user.password === password
-  ));
+  const user = users.find(
+    (user) => user.username === username && user.password === password
+  );
 
   if (user) {
     const token = generateToken();
@@ -23,7 +27,7 @@ router.get('/api/login',timeout, (req, res) => {
       id: user.id,
       email: user.email,
       token,
-    })
+    });
 
     return;
   }
@@ -52,10 +56,8 @@ router.get('/api/user', (req, res) => {
     const tokenOwnerId = getTokenOwner(token);
 
     if (tokenOwnerId) {
-      const tokenOwner = users.find((user) => (
-        user.id === tokenOwnerId
-      ));
-  
+      const tokenOwner = users.find((user) => user.id === tokenOwnerId);
+
       res.status(200).json({
         id: tokenOwner.id,
         username: tokenOwner.username,

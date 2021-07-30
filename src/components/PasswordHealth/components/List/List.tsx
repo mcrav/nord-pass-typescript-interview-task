@@ -1,5 +1,5 @@
-import {FC, useState} from 'react';
-import {IItem} from "~/services/getUserItems";
+import { FC, useState } from 'react';
+import { IItem } from '~/services/getUserItems';
 import ItemIcon from './components/ItemIcon';
 import updateItem from '../../../../services/updateItem';
 import Modal from 'react-modal';
@@ -7,16 +7,26 @@ import Modal from 'react-modal';
 import './list-style.scss';
 
 interface IList {
-  items: Array<IItem>,
+  // All password items
+  items: Array<IItem>;
+  // Callback for when password is updated
+  onPasswordUpdate: Function;
 }
 
 interface IUpdateModal {
+  // Password item being updated
   item: IItem;
+  // Callback for when password is updated.
+  onPasswordUpdate: Function;
 }
 
-const UpdateModal: FC<IUpdateModal> = ({ item }) => {
+/**
+ * Modal allowing user to update password for specific password item.
+ * If modal not open, just shows a button that will open the modal.
+ */
+const UpdateModal: FC<IUpdateModal> = ({ item, onPasswordUpdate }) => {
   const [showModal, setShowModal] = useState(false);
-  const [newPass, setNewPass] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   return (
     <>
@@ -28,54 +38,63 @@ const UpdateModal: FC<IUpdateModal> = ({ item }) => {
         isOpen={showModal}
         onRequestClose={() => setShowModal(false)}
         contentLabel="Example Modal"
+        // Needed for screenreaders
+        appElement={document.getElementById('app')}
       >
         <h1>Update Password</h1>
         <input
           placeholder="new password"
           className="input"
-          value={newPass}
-          onChange={(event) => setNewPass(event.target.value)} 
+          value={newPassword}
+          onChange={(event) => setNewPassword(event.target.value)}
         />
         <div className="pt-12px text-center">
-          <button className="button" onClick={async () => {
-            await updateItem({
-              ...item,
-              password: newPass,
-            })
-
-            window.location.reload();
-          }}>Change</button>
-          <button className="button ml-12px" onClick={() => {
-            setNewPass('');
-            setShowModal(false)
-          }}>
+          <button
+            className="button"
+            onClick={async () => {
+              await updateItem({
+                ...item,
+                password: newPassword,
+              });
+              setNewPassword('');
+              setShowModal(false);
+              onPasswordUpdate();
+            }}
+          >
+            Change
+          </button>
+          <button
+            className="button ml-12px"
+            onClick={() => {
+              setNewPassword('');
+              setShowModal(false);
+            }}
+          >
             Cancel
           </button>
         </div>
       </Modal>
     </>
   );
-}
+};
 
-const List: FC<IList> = ({items}) => (
+/**
+ * List of all password items, with icon, title, description and button to
+ * update password.
+ */
+const List: FC<IList> = ({ items, onPasswordUpdate }) => (
   <ul className="list">
-    {
-      items.map((item) => (
-        <li className="item">
-          <ItemIcon title={item.title}/>
-          <div>
-            <div className="title">
-              {item.title}
-            </div>
-            <div className="description">
-              {item.description}
-            </div>
-          </div>
-          <UpdateModal item={item} />
-        </li>
-      ))
-    }
+    {items.map((item) => (
+      <li key={item.title} className="item">
+        <ItemIcon title={item.title} />
+        <div>
+          <div className="title">{item.title}</div>
+          <div className="description">{item.description}</div>
+        </div>
+        <UpdateModal item={item} onPasswordUpdate={onPasswordUpdate} />
+      </li>
+    ))}
   </ul>
-)
+);
 
 export default List;
